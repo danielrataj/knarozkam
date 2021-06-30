@@ -31,7 +31,7 @@
                 :max-files="1"
                 :hide-upload-btn="true"
                 :auto-upload="true"
-                url="http://localhost:1337/v1/attachment"
+                :url="`${API_URL}/v1/attachment`"
                 @uploaded="fileUploaded"
                 field-name="file"
               />
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+const API_URL = process.env.APP_API_URL
+
 export default {
   name: 'PageAttachmentForm',
   data () {
@@ -69,7 +71,8 @@ export default {
         fd: '',
         content: ''
       },
-      fileUpload: false
+      fileUpload: false,
+      API_URL
     }
   },
   methods: {
