@@ -1,0 +1,97 @@
+version: '3'
+
+services:
+  app:
+    container_name: app
+    restart: always
+    image: ghcr.io/danielrataj/knarozkam/app:1.0
+    ports:
+      - "8080:80"
+    environment:
+      NODE_ENV: production
+      API_TOKEN: 5qZMfcpTH8FR93Kfek9Cudyse3ThnK9LUEm9SRmtTrtZVLB6Gf9hXqpdKYjY2X3d
+      APP_API_URL: http://localhost:1337
+      BASIC_AUTH_USERNAME: knarozkam
+      BASIC_AUTH_PASSWORD: knarozkam
+    networks:
+      - app-tier
+    depends_on:
+      - mongodb
+      - redis
+      - api
+  api:
+    container_name: api
+    restart: always
+    ports:
+      - "1337:1337"
+    image: ghcr.io/danielrataj/knarozkam/api:1.0
+    environment:
+      NODE_ENV: production
+      CONFIG_CORS_ALLOW_ORIGINS: '*'
+      MONGO_CONNECTION: mongodb://8mw8cjA5Nj4zyvhDUAHujCnc2zc9SDRKbqRT4W9XzAtgU6jN5KVLXJEjLXbU3NdC:zhL9n39Dh9SwXLMm8x77cJZQWNTKqHbvLyV7VN6VYe3222xDpMgduAubny7P9Nbb@mongo:27017/knarozkam?authSource=knarozkam
+      APP_DATA_ENCRYPTION_KEY: OwGBr7C3/QKGww+K3nleRTpc/IjwYQq010xE7leuWss=
+      APP_REDIS_PASSWORD: N6FJHdZ7w7ZCUrMYRQ8Jy7bt5xCYpRN6ekQTMwSmCNyeU4GeVPuC5gvYA24g6cB2
+      APP_REDIS_CONNECTION_HOST: redis
+      APP_REDIS_CONNECTION_PORT: 6379
+      APP_TOKEN: 5qZMfcpTH8FR93Kfek9Cudyse3ThnK9LUEm9SRmtTrtZVLB6Gf9hXqpdKYjY2X3d
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - app-tier
+
+  mailer:
+    container_name: mailer
+    restart: always
+    image: ghcr.io/danielrataj/knarozkam/mailer:1.0
+    environment:
+      NODE_ENV: production
+      APP_REDIS_PASSWORD: N6FJHdZ7w7ZCUrMYRQ8Jy7bt5xCYpRN6ekQTMwSmCNyeU4GeVPuC5gvYA24g6cB2
+      APP_REDIS_HOST: redis
+      APP_REDIS_PORT: 6379
+      MAILER_HOST: ''
+      MAILER_PORT: 25
+    depends_on:
+      - mongodb
+      - redis
+      - api
+    networks:
+      - app-tier
+
+  mongodb:
+    container_name: mongo
+    image: ghcr.io/danielrataj/knarozkam/bitnami/mongodb:4.4.1-debian-10-r8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/bitnami
+    environment:
+      MONGODB_ROOT_PASSWORD: IVsXpdGHGIKywvLxt6MGcHfA0ji05DGh
+      MONGODB_DATABASE: knarozkam
+      MONGODB_USERNAME: 8mw8cjA5Nj4zyvhDUAHujCnc2zc9SDRKbqRT4W9XzAtgU6jN5KVLXJEjLXbU3NdC
+      MONGODB_PASSWORD: zhL9n39Dh9SwXLMm8x77cJZQWNTKqHbvLyV7VN6VYe3222xDpMgduAubny7P9Nbb
+    networks:
+      - app-tier
+
+  redis:
+    container_name: redis
+    image: ghcr.io/danielrataj/knarozkam/bitnami/redis:6.0.8-debian-10-r6
+    environment:
+      REDIS_PASSWORD: N6FJHdZ7w7ZCUrMYRQ8Jy7bt5xCYpRN6ekQTMwSmCNyeU4GeVPuC5gvYA24g6cB2
+    volumes:
+      - redis_data:/bitnami
+    networks:
+      - app-tier
+
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+  mailer_data:
+    driver: local
+
+networks:
+  app-tier:
+    external:
+      name: knarozkam_app-tier

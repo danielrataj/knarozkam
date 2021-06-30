@@ -1,0 +1,26 @@
+FROM node:15.14.0-alpine3.13
+LABEL MAINTAINER="Daniel Rataj <daniel.rataj@centrum.cz>"
+LABEL org.opencontainers.image.source="https://github.com/danielrataj/knarozkam"
+
+RUN apk add --no-cache openssl=1.1.1k-r0 \
+  docker-cli=20.10.3-r1 \
+  && rm -rf /var/cache/apk/*
+
+WORKDIR /app
+
+COPY api/package.json .
+RUN npm install --quiet
+
+# copy required app files
+COPY api/api ./api
+COPY api/config/ ./config
+COPY api/static/ ./static
+COPY api/views/ ./views
+COPY api/app.js ./app.js
+COPY api/.sailsrc ./.sailsrc
+
+# start Sails app
+CMD [ "npm", "start" ]
+
+# expose port for Node
+EXPOSE 1337
