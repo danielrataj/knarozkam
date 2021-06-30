@@ -4,6 +4,7 @@
       <div class="col-12">
         <div class="text-h6">Lidé</div>
         <div class="subtitle">Maximálně můžete vložit 500 záznamů.</div>
+        <div class="subtitle text-red">Sloupce označené hvězdičkou jsou povinné.</div>
       </div>
       <div class="col-12">
         <hot-table
@@ -13,19 +14,19 @@
           :licenseKey="licenseKey"
           ref="hotTableComponent"
         >
-          <hot-column title="Odesílatel" />
-          <hot-column title="Jméno" />
-          <hot-column title="Příjmení" />
-          <hot-column title="E-mail" />
-          <hot-column title="Den" type="numeric" />
-          <hot-column title="Měsíc" type="numeric" />
-          <hot-column title="Hodina" type="numeric" />
-          <hot-column title="Minuta" type="numeric" />
-          <hot-column title="Pohlaví" editor="select" :selectOptions="gender" />
-          <hot-column title="Předmět" />
-          <hot-column title="Oslovení" />
-          <hot-column title="Text" />
-          <hot-column title="Podpis" />
+          <hot-column title="Odesílatel *" />
+          <hot-column title="Jméno *" />
+          <hot-column title="Příjmení *" />
+          <hot-column title="E-mail *" />
+          <hot-column title="Den *" type="numeric" />
+          <hot-column title="Měsíc *" type="numeric" />
+          <hot-column title="Hodina *" type="numeric" />
+          <hot-column title="Minuta *" type="numeric" />
+          <hot-column title="Pohlaví *" editor="select" :selectOptions="gender" />
+          <hot-column title="Předmět *" />
+          <hot-column title="Oslovení *" />
+          <hot-column title="Text *" />
+          <hot-column title="Podpis " />
           <hot-column title="Příloha" editor="select" :selectOptions="attachments" />
           <hot-column title="Poznámka" />
         </hot-table>

@@ -56,7 +56,7 @@
               Lidé
             </q-item-label>
             <q-item-label caption>
-              seznam osob a narozenin
+              seznam osob a nastavení
             </q-item-label>
           </q-item-section>
         </q-item>
