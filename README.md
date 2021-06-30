@@ -20,7 +20,7 @@ The easiest way is to run this project with the `docker-compose.yml` file.
 ```bash
 docker network create -d bridge knarozkam_app-tier
 
-docker-compose -p knarozkam down && docker-compose -p knarozkam up
+docker-compose -p knarozkam down && docker-compose -p knarozkam up -d
 ```
 
 Now you can access the monitor right from URL <http://localhost:8080>. Default user/password based on the example is "knarozkam:knarozkam".
