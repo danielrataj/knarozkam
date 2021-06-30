@@ -23,7 +23,7 @@ docker network create -d bridge knarozkam_app-tier
 docker-compose -p knarozkam down && docker-compose -p knarozkam up
 ```
 
-Now you can access the monitor right from URL <http://localhost:8080>.
+Now you can access the monitor right from URL <http://localhost:8080>. Default user/password based on the example is "knarozkam:knarozkam".
 
 ## Ready to contribute?
 
