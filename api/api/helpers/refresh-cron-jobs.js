@@ -1,5 +1,5 @@
 const { DateTime } = require('luxon')
-const objectHash = require('object-hash')
+// const cronParser = require('cron-parser')
 
 module.exports = {
 
@@ -13,10 +13,11 @@ module.exports = {
   exits: {
   },
 
-  fn: async function (inputs, exits) {
+  fn: async function (_, exits) {
     try {
       // clean queue first
-      await sails.hooks.bull.mailer.empty()
+      const jobs = await sails.hooks.bull.mailer.getRepeatableJobs()
+      await Promise.all(jobs.map(j => sails.hooks.bull.mailer.removeRepeatableByKey(j.key)))
 
       const datatable = await DataTable.findOne({
         version: 1
@@ -65,20 +66,20 @@ module.exports = {
           day,
           month,
           hour,
-          minute
+          minute,
+          zone: 'Europe/Prague'
         })
 
-        const jobId = objectHash({
-          sender,
-          firstname,
-          lastname,
-          email,
-          day,
-          month,
-          hour,
-          minute,
-          gender
-        })
+        const nowDate = DateTime.now().setZone('Europe/Prague')
+        const diff = startDate.diff(nowDate)
+
+        sails.log(`[START] Adding mail to queue. From: ${sender}, to ${email}.`)
+
+        // diff is lower, skip
+        if (diff.milliseconds < 0) {
+          sails.log(`[END] No need to put the email to queue because it happened in the past. From: ${sender}, to ${email}.`)
+          continue
+        }
 
         await sails.hooks.bull.mailer.add({
           sender,
@@ -97,10 +98,10 @@ module.exports = {
           attachment: attachmentContent,
           attachmentExtension
         }, {
-          jobId,
-          cron: '0 0 1 1 *', // every year
-          startDate
+          delay: diff.milliseconds
         })
+
+        sails.log(`[END] Adding mail to queue. From: ${sender}, to ${email}.`)
       }
     } catch (error) {
       if (error) {

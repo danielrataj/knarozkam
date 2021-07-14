@@ -35,16 +35,6 @@ module.exports.bootstrap = async function (done) {
     })
   }
 
-  // scan for all cronjobs in every 30 seconds
-  cron.schedule('* * * * *', async () => {
-    sails.log('[update-cron-jobs] Run cronjob to setup repeating jobs.')
-    // do something useful every minute
-
-    await sails.helpers.refreshCronJobs()
-  })
-
-  await sails.helpers.refreshCronJobs()
-
   // initiate datatable with users
   const datatableResults = await DataTable.find({})
 
@@ -53,6 +43,11 @@ module.exports.bootstrap = async function (done) {
       version: 1
     })
   }
+
+  // refresh on 1st every year to make sure we re-enqueue all records
+  cron.schedule('0 0 1 1 *', async () => {
+    await sails.helpers.refreshCronJobs()
+  })
 
   // Don't forget to trigger `done()` when this bootstrap function's logic is finished.
   // (otherwise your server will never lift, since it's waiting on the bootstrap)

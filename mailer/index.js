@@ -42,15 +42,15 @@ mailerQueue.process(async (job, done) => {
       to: data.email,
       subject: data.subject,
       html: `
-      ${data.salutation}<br>
+      ${data.salutation}<br><br><br>
       ${data.text}<br><br><br>
       ${data.signature}
       `,
       attachments
     })
-    console.error(`[${packageName}] [${logSymbols.info}]`, 'Mail successfully sent.')
+    console.error(`[${packageName}] [${logSymbols.info}]`, `Mail successfully sent from ${data.sender} to ${data.email}.`)
   } catch (error) {
-    console.error(`[${packageName}] [${logSymbols.error}]`, 'Mail not sent.')
+    console.error(`[${packageName}] [${logSymbols.error}]`, `Mail not sent from ${data.sender} to ${data.email}.`)
     if (error) {
       console.error(`[${packageName}] [${logSymbols.error} ${logSymbols.error} ${logSymbols.error}]`, error)
     }

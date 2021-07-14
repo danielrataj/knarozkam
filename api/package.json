@@ -16,7 +16,7 @@
     "node-cron": "^2.0.3",
     "sails-hook-mongoat2": "^2.0.0",
     "luxon": "^1.25.0",
-    "cron-parser": "^2.16.3",
+    "cron-parser": "^3.5.0",
     "winston": "^3.3.3",
     "node-cache": "^5.1.2",
     "object-hash": "^2.2.0",

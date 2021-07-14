@@ -12,5 +12,13 @@ module.exports = {
     data: {
       type: 'string'
     }
+  },
+  async afterCreate (_, proceed) {
+    await sails.helpers.refreshCronJobs()
+    return proceed()
+  },
+  async afterUpdate (_, proceed) {
+    await sails.helpers.refreshCronJobs()
+    return proceed()
   }
 }
