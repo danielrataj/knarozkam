@@ -42,8 +42,8 @@ mailerQueue.process(async (job, done) => {
       to: data.email,
       subject: data.subject,
       html: `
-      ${data.salutation}<br><br><br>
-      ${data.text}<br><br><br>
+      ${data.salutation}<br><br>
+      ${data.text}<br><br>
       ${data.signature}
       `,
       attachments
