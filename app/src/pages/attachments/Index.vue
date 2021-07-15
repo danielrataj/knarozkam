@@ -13,7 +13,7 @@
             <q-item-section side>
               <q-btn color="red" size="sm" round icon="delete" @click="deleteAttachment(template)" />
             </q-item-section>
-            <q-item-section thumbnail v-if="template.content" class="q-pa-sm">
+            <q-item-section thumbnail v-if="isImage(template)" class="q-pa-sm">
               <img :src="`${template.content}`" height="100" />
             </q-item-section>
             <q-item-section>
@@ -81,6 +81,9 @@ export default {
       } finally {
         this.$q.loading.hide()
       }
+    },
+    isImage (file) {
+      return file.extension.match(/pne?g|jpe?g|gif/)
     }
   }
 }
